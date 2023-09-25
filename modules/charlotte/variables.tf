@@ -1,5 +1,4 @@
-variable "security_groups" {
+variable "sgroups_var" {
   # default   = []
   type      = any
 }
-
