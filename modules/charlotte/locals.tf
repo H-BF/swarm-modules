@@ -85,10 +85,10 @@ locals {
     security_groups_network__name__flatten = flatten([
         for security_group in local.security_groups : {
             "${security_group.name}": {
-                "cidr":join(",",flatten([
+                "cidr":flatten([
                     for cidr in try(security_group.cidrs, []):
                         "${cidr}"
-                 ]))
+                 ])
                 "default_action": try(security_group.default_action, "ACCEPT")
                 "logs":  try(security_group.logs,  false)
                 "trace": try(security_group.trace, false)
