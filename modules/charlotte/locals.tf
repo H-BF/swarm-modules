@@ -85,13 +85,26 @@ locals {
     security_groups_network__name__flatten = flatten([
         for security_group in local.security_groups : {
             "${security_group.name}": {
-                "cidr":join(",",flatten([
+                cidr = flatten([
                     for cidr in try(security_group.cidrs, []):
-                        "${cidr}"
-                 ]))
-                "default_action": try(security_group.default_action, "ACCEPT")
-                "logs":  try(security_group.logs,  false)
-                "trace": try(security_group.trace, false)
+                        cidr
+                 ])
+                default_action  = try(security_group.default_action, "ACCEPT")
+                logs            = try(security_group.logs,  false)
+                trace           = try(security_group.trace, false)
+
+                icmp = try(security_group.icmp.type, null) == null ? null : {
+                    logs  = try(security_group.icmp.logs,   false)
+                    trace = try(security_group.icmp.trace,  false)
+                    type  = try(security_group.icmp.type,   [])
+                }
+                icmp6 = try(security_group.icmp6.type, null) == null ? null : {
+                    logs  = try(security_group.icmp6.logs,   false)
+                    trace = try(security_group.icmp6.trace,  false)
+                    type  = try(security_group.icmp6.type,   [])
+                }
+
+
             }
         }
     ])
@@ -230,10 +243,11 @@ locals {
     # ->
     rules_map = { for item in local.rules_flatten :
         "${item.sgroup_from}:${item.sgroup_to}" => {
-            sgroup_from      = item.sgroup_from
+            sgroup_from     = item.sgroup_from
             sgroup_to       = item.sgroup_to
             access          = item.access
             logs            = try(item.logs, false)
+            trace           = try(item.trace, false)
         }
         # Условие срабатывания если есть блок sgroup_to
         if try(item.sgroup_to, "") != ""
@@ -271,9 +285,10 @@ locals {
     rules_sgoups_to = { for item in local.rules_flatten :
         "${item.sgroup_from}:${try(item.sgroups_to.name, "")}" => {
             sgroup_from      = item.sgroup_from
-            sgoups_to       = item.sgroups_to.sgroups
-            access          = item.access
-            logs            = item.logs
+            sgoups_to        = item.sgroups_to.sgroups
+            access           = item.access
+            logs             = try(item.logs, false)
+            trace            = try(item.trace, false)
         }
         # Условие срабатывания если есть блок sgroups_to
         if try(item.sgroups_to, []) != []
@@ -309,7 +324,8 @@ locals {
                     sgroup_to   = sgroup
                     sgroup_from = value.sgroup_from
                     access      = value.access
-                    logs        = value.logs
+                    logs        = try(value.logs, false)
+                    trace       = try(value.logs, false)
                 }
             }
         ]
@@ -448,6 +464,7 @@ locals {
                     sgroup_to       = value.sgroup_to
                     access          = value.access[proto]
                     logs            = value.logs
+                    trace           = value.trace
                 }
             }
         ]
