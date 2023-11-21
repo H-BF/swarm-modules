@@ -5,7 +5,7 @@ resource "sgroups_fqdn_rules" "rules" {
   ]
   items = {
     for key, value in local.rules_fqdn_to_map :
-      "${value.proto}:sg(${value.sgroup_from}):fqdn(${value.fqdn_to})" => {
+      "${value.proto}:sg(${value.sgroup_from})fqdn(${value.fqdn_to})" => {
         proto   = value.proto
         logs    = value.logs
         sg_from = value.sgroup_from
