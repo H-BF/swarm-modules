@@ -5,7 +5,7 @@ resource "sgroups_rules" "rules" {
   ]
   items = {
     for key, value in local.rules_sgoups_to_new_map :
-      "${value.proto}:sg(${value.sgroup_from}):sg(${value.sgroup_to})" => {
+      "${value.proto}:sg(${value.sgroup_from})sg(${value.sgroup_to})" => {
         
         proto   = value.proto
         logs    = value.logs
