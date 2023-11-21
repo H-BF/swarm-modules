@@ -5,7 +5,7 @@ resource "sgroups_icmp_rules" "rulesIPv4" {
   ]
   items = {
     for key, value in local.rules_sgoups_to_new_map :
-      "sg(${value.sgroup_from})sg(${value.sgroup_to})icmp4)" => {
+      "sg(${value.sgroup_from})sg(${value.sgroup_to})icmp4" => {
         
         logs    = value.logs
         trace   = value.trace
@@ -27,7 +27,7 @@ resource "sgroups_icmp_rules" "rulesIPv6" {
   ]
   items = {
     for key, value in local.rules_sgoups_to_new_map :
-      "sg(${value.sgroup_from})sg(${value.sgroup_to})icmp6)" => {
+      "sg(${value.sgroup_from})sg(${value.sgroup_to})icmp6" => {
         
         logs    = value.logs
         trace   = value.trace
