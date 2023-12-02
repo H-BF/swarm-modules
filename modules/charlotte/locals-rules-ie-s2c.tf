@@ -11,7 +11,12 @@ locals {
             traffic          = value.traffic
         }
         # Условие срабатывания если есть блок CIDRSet
-        if try(value.CIDRSet, ["false"]) != ["false"]
+        if try(value.cidrSet, []) != []
+    }
+
+    rules_map_all_ie_s2c_validating = { for key, value in local.rules_map_all_ie_s2c :
+        key => value
+        if contains(["egress","ingress"], "${value.traffic}")
     }
 
 
