@@ -8,8 +8,9 @@ resource "sgroups_fqdn_rules" "rules" {
       "${value.proto}:sg(${value.sgroup_from})fqdn(${value.fqdn_to})" => {
         proto   = value.proto
         logs    = value.logs
+        trace   = value.trace
         sg_from = value.sgroup_from
-        fqdn   = value.fqdn_to
+        fqdn    = value.fqdn_to
 
         ports = flatten([
           for port in value.access: {

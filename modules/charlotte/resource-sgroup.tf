@@ -7,7 +7,7 @@ resource "sgroups_groups" "groups" {
     for key, value in local.security_groups_network__name__map :
       key => {
         name            = key
-        networks        = value.cidr
+        networks        = value.cidrs
         logs            = value.logs
         trace           = value.trace
         default_action  = value.default_action
