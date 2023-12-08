@@ -4,11 +4,12 @@ resource "sgroups_rules" "rules" {
     sgroups_groups.groups,
   ]
   items = {
-    for key, value in local.rules_sgoups_to_new_map :
+    for key, value in local.rules_sgoups_to_new_map_all :
       "${value.proto}:sg(${value.sgroup_from})sg(${value.sgroup_to})" => {
         
         proto   = value.proto
         logs    = value.logs
+        # trace   = value.trace #TODO
         sg_from = value.sgroup_from
         sg_to   = value.sgroup_to
 
@@ -19,6 +20,6 @@ resource "sgroups_rules" "rules" {
           }
         ])
       }
-      if contains(["tcp", "udp"], value.proto)
+      if contains(["tcp:s2s", "udp:s2s"], "${value.proto}:${value.traffic}")
   }
 }
