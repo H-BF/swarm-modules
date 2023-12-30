@@ -4,7 +4,7 @@ resource "sgroups_icmp_rules" "rules" {
     sgroups_groups.groups,
   ]
   items = {
-    for key, value in local.rules_sgoups_to_new_map_all :
+    for key, value in local.rules_sgroup_set_new_map_all :
       "sg(${value.sgroup_from})sg(${value.sgroup_to})icmp${split("icmpIPv", value.proto).1}" => {
         
         logs    = value.logs
