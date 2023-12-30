@@ -2,15 +2,15 @@ locals {
 
     # Получаем  акутальный список правил с разбивкой по ingress/egress для fromCIDRs, toCIDRs
     rules_map_all_ie_s2c = { for value in local.rules_flatten_all :
-        "${value.traffic}:${value.sgroup_from}:${substr(sha256(join(",",flatten(value.CIDRSet))), 0, 8)}" => {
+        "${value.traffic}:${value.sgroup_from}:${substr(sha256(join(",",flatten(value.cidrSet))), 0, 8)}" => {
             sgroup_from      = value.sgroup_from
-            CIDRSet          = value.CIDRSet
+            cidr_set         = value.cidrSet
             access           = value.access
             logs             = try(value.logs,  false)
             trace            = try(value.trace, false)
             traffic          = value.traffic
         }
-        # Условие срабатывания если есть блок CIDRSet
+        # Условие срабатывания если есть блок cidrSet
         if try(value.cidrSet, []) != []
     }
 
@@ -53,7 +53,7 @@ locals {
     # Получаем  акутальный список правил с разбивкой по ingress/egress для каждого CIDR
     rules_map_all_ie_s2c_flatten = flatten([
         for key, value in local.rules_map_all_ie_s2c: [
-            for cidr in value.CIDRSet: {
+            for cidr in value.cidr_set: {
                  "${value.sgroup_from}:${cidr}:${value.traffic}:${split(":", key)[1]}" = {
                     sg_name     = value.sgroup_from
                     cidr        = cidr

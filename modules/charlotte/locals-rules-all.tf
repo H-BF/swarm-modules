@@ -47,18 +47,19 @@ locals {
     # }
     # ->
     # CLASSIC SINGLE SGROUP RESOURCE
-    rules_map_all = { for item in local.rules_flatten_all :
-        "${item.sgroup_from}:${item.sgroup_to}:${item.traffic}" => {
-            sgroup_from     = item.sgroup_from
-            sgroup_to       = item.sgroup_to
-            access          = item.access
-            logs            = try(item.logs, false)
-            trace           = try(item.trace, false)
-            traffic         = item.traffic
-        }
-        # Условие срабатывания если есть блок sgroup_to
-        if try(item.sgroup_to, "") != ""
-    }
+    # отключил в пользу унификации через sgroupSet
+    # rules_map_all = { for item in local.rules_flatten_all :
+    #     "${item.sgroup_from}:${item.sgroup_to}:${item.traffic}" => {
+    #         sgroup_from     = item.sgroup_from
+    #         sgroup_to       = item.sgroup_to
+    #         access          = item.access
+    #         logs            = try(item.logs, false)
+    #         trace           = try(item.trace, false)
+    #         traffic         = item.traffic
+    #     }
+    #     # Условие срабатывания если есть блок sgroup_to
+    #     if try(item.sgroup_to, "") != ""
+    # }
 
     # {
     #   + "namespace/env/gitlab-runner:71439deb:s2s" = {
@@ -73,7 +74,7 @@ locals {
     #             ]
     #         }
     #       + logs        = false
-    #       + sgoups_to   = [
+    #       + sgroupSet   = [
     #           + "k8s/prod/k8s.ads-dl.control-plane",
     #           + "k8s/prod/k8s.ads-el.control-plane",
     #         ]
@@ -84,17 +85,17 @@ locals {
     # }
     # ->
     # CLASSIC LIST SGROUPs RESOURCEs
-    rules_sgoups_to_all = { for item in local.rules_flatten_all :
-        "${item.sgroup_from}:${substr(sha256(join(",",flatten(item.sgroups_to))), 0, 8)}:${item.traffic}" => {
+    rules_sgroup_set_all = { for item in local.rules_flatten_all :
+        "${item.sgroup_from}:${substr(sha256(join(",",flatten(item.sgroupSet))), 0, 8)}:${item.traffic}" => {
             sgroup_from      = item.sgroup_from
-            sgoups_to        = item.sgroups_to
+            sgroup_set       = item.sgroupSet
             access           = item.access
             logs             = try(item.logs,  false)
             trace            = try(item.trace, false)
             traffic          = item.traffic
         }
-        # Условие срабатывания если есть блок sgroups_to
-        if try(item.sgroups_to, []) != []
+        # Условие срабатывания если есть блок sgroupSet
+        if try(item.sgroupSet, []) != []
     }
 
     # 
@@ -122,8 +123,8 @@ locals {
     # ->
     # CLASSIC LIST SGROUPs RESOURCEs -> # CLASSIC SINGLE SGROUP RESOURCE
     rules_sgoup_to_flatten_all = flatten([
-        for key, value in local.rules_sgoups_to_all: [
-            for sgroup in value.sgoups_to: {
+        for key, value in local.rules_sgroup_set_all: [
+            for sgroup in value.sgroup_set: {
                  "${value.sgroup_from}:${sgroup}:${value.traffic}:${split(":", key)[1]}" = {
                     sgroup_from = value.sgroup_from
                     sgroup_to   = sgroup
@@ -163,7 +164,9 @@ locals {
     #     }
     #  
     # ->
-    rules_sgoups_to_map_all = merge(local.rules_map_all, local.rules_sgoup_to_map_all)
+    # отключил в пользу унификации через sgroupSet
+    # rules_sgroup_set_map_all = merge(local.rules_map_all, local.rules_sgoup_to_map_all)
+    rules_sgroup_set_map_all = local.rules_sgoup_to_map_all
 
     #  [
     #   + {
@@ -186,8 +189,8 @@ locals {
     #     }
     #  ]
     # ->
-    rules_sgoups_by_proto_flatten_all = flatten([
-        for key, value in local.rules_sgoups_to_map_all: [
+    rules_sgroups_by_proto_flatten_all = flatten([
+        for key, value in local.rules_sgroup_set_map_all: [
                 for proto, access in value.access: {
                 "${proto}:${key}": {
                     proto           = proto
@@ -202,7 +205,7 @@ locals {
         ]
     ])
 
-    rules_sgoups_to_new_map_all = { for item in local.rules_sgoups_by_proto_flatten_all :
+    rules_sgroup_set_new_map_all = { for item in local.rules_sgroups_by_proto_flatten_all :
       keys(item)[0] => values(item)[0]
     }
 
