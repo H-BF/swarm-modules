@@ -4,6 +4,7 @@ locals {
         "${item.sgroup_from}:${substr(sha256(join(",",flatten(item.fqdnSet))), 0, 8)}" => {
             access      = item.access
             sgroup_from = item.sgroup_from
+            protocols   = try(item.protocols, null)
             fqdnSet     = try(item.fqdnSet, [])
             logs        = try(item.logs,  false)
             trace       = try(item.trace, false)
@@ -25,6 +26,7 @@ locals {
                 "${key}:${fqdn}:${proto}": {
                     fqdn_to         = fqdn
                     proto           = proto
+                    protocols       = value.protocols
                     sgroup_from     = value.sgroup_from
                     access          = value.access[proto]
                     logs            = try(value.logs,  false)
