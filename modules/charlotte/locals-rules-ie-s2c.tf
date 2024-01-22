@@ -82,7 +82,7 @@ locals {
     #             ]
     #           + cidr    = "11.0.0.0/8"
     #           + logs    = false
-    #           + proto   = "udp"
+    #           + transport   = "udp"
     #           + sg_name = "namespace/env/gitlab-runner"
     #           + trace   = false
     #           + traffic = "ingress"
@@ -90,15 +90,15 @@ locals {
     #     },
     # ]
     #---->
-    # Получаем  акутальный список правил с разбивкой по PROTO для каждого CIDR
+    # Получаем  акутальный список правил с разбивкой по TRANSPORT для каждого CIDR
     rules_map_all_ie_s2c_by_proto_flatten = flatten([
         for key, value in local.rules_map_all_ie_s2c_map: [
-                for proto, access in value.access: {
-                "${proto}:${key}": {
-                    proto           = proto
+                for transport, access in value.access: {
+                "${transport}:${key}": {
+                    transport       = transport
                     sg_name         = value.sg_name
                     cidr            = value.cidr
-                    access          = value.access[proto]
+                    access          = value.access[transport]
                     logs            = value.logs
                     trace           = value.trace
                     traffic         = value.traffic

@@ -180,7 +180,7 @@ locals {
     #                 },
     #             ]
     #           + logs        = false
-    #           + proto       = "udp"
+    #           + transport       = "udp"
     #           + sgroup_from = "no-routed"
     #           + sgroup_to   = "namespace/env/gitlab-runner"
     #           + trace       = false
@@ -191,12 +191,12 @@ locals {
     # ->
     rules_sgroups_by_proto_flatten_all = flatten([
         for key, value in local.rules_sgroup_set_map_all: [
-                for proto, access in value.access: {
-                "${proto}:${key}": {
-                    proto           = proto
+                for transport, access in value.access: {
+                "${transport}:${key}": {
+                    transport           = transport
                     sgroup_from     = value.sgroup_from
                     sgroup_to       = value.sgroup_to
-                    access          = value.access[proto]
+                    access          = value.access[transport]
                     logs            = try(value.logs,  false)
                     trace           = try(value.trace, false)
                     traffic         = value.traffic

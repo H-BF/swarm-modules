@@ -5,16 +5,16 @@ resource "sgroups_cidr_rules" "rules" {
   ]
   items = {
     for key, value in local.rules_map_all_ie_s2c_by_proto_map :
-      "${value.proto}:cidr(${value.cidr})sg(${value.sg_name})${value.traffic}" => {
+      "${value.transport}:cidr(${value.cidr})sg(${value.sg_name})${value.traffic}" => {
         
-        traffic = value.traffic
+        traffic     = value.traffic
 
-        sg_name = value.sg_name
-        cidr    = value.cidr
+        sg_name     = value.sg_name
+        cidr        = value.cidr
 
-        proto   = value.proto
-        logs    = value.logs
-        trace   = value.trace
+        transport   = value.transport
+        logs        = value.logs
+        trace       = value.trace
 
         ports = flatten([
           for port in value.access: {
@@ -27,6 +27,6 @@ resource "sgroups_cidr_rules" "rules" {
       if contains(["tcp:ingress",
                    "udp:ingress",
                    "tcp:egress",
-                   "udp:egress"], "${value.proto}:${value.traffic}")
+                   "udp:egress"], "${value.transport}:${value.traffic}")
   }
 }
