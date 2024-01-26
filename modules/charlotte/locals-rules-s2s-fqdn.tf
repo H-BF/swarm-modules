@@ -22,13 +22,13 @@ locals {
     rules_fqdn_to_flatten = flatten([
         for key, value in local.rules_sg_to_fqdn_map_egress_validating: [
             for fqdn in value.fqdnSet: [
-                for proto, access in value.access: {
-                "${key}:${fqdn}:${proto}": {
+                for transport, access in value.access: {
+                "${key}:${fqdn}:${transport}": {
                     fqdn_to         = fqdn
-                    proto           = proto
+                    transport       = transport
                     protocols       = value.protocols
                     sgroup_from     = value.sgroup_from
-                    access          = value.access[proto]
+                    access          = value.access[transport]
                     logs            = try(value.logs,  false)
                     trace           = try(value.trace, false)
                 }

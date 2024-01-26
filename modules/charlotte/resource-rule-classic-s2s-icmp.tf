@@ -5,18 +5,18 @@ resource "sgroups_icmp_rules" "rules" {
   ]
   items = {
     for key, value in local.rules_sgroup_set_new_map_all :
-      "sg(${value.sgroup_from})sg(${value.sgroup_to})icmp${split("icmpIPv", value.proto).1}" => {
+      "sg(${value.sgroup_from})sg(${value.sgroup_to})icmp${split("icmpIPv", value.transport).1}" => {
         
         logs    = value.logs
         trace   = value.trace
         sg_from = value.sgroup_from
         sg_to   = value.sgroup_to
-        ip_v    = split("icmp", value.proto).1
+        ip_v    = split("icmp", value.transport).1
 
         type = flatten([
           for item in value.access: [item.type]
         ])
       }
-    if contains(["icmpIPv6:s2s", "icmpIPv4:s2s"], "${value.proto}:${value.traffic}")
+    if contains(["icmpIPv6:s2s", "icmpIPv4:s2s"], "${value.transport}:${value.traffic}")
   }
 }

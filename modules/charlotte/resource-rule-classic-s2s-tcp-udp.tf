@@ -5,13 +5,13 @@ resource "sgroups_rules" "rules" {
   ]
   items = {
     for key, value in local.rules_sgroup_set_new_map_all :
-      "${value.proto}:sg(${value.sgroup_from})sg(${value.sgroup_to})" => {
+      "${value.transport}:sg(${value.sgroup_from})sg(${value.sgroup_to})" => {
         
-        proto   = value.proto
-        logs    = value.logs
+        transport   = value.transport
+        logs        = value.logs
         # trace   = value.trace #TODO
-        sg_from = value.sgroup_from
-        sg_to   = value.sgroup_to
+        sg_from     = value.sgroup_from
+        sg_to       = value.sgroup_to
 
         ports = flatten([
           for port in value.access: {
@@ -20,6 +20,6 @@ resource "sgroups_rules" "rules" {
           }
         ])
       }
-      if contains(["tcp:s2s", "udp:s2s"], "${value.proto}:${value.traffic}")
+      if contains(["tcp:s2s", "udp:s2s"], "${value.transport}:${value.traffic}")
   }
 }
