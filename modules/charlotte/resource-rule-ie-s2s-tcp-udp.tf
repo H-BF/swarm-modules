@@ -4,13 +4,13 @@ resource "sgroups_ie_rules" "rules" {
     sgroups_groups.groups,
   ]
   items = {
-    for key, value in local.rules_map_all_ie_s2s_by_proto_map :
-      "${value.transport}:sg_local(${value.sg_local})sg(${value.sg})${value.traffic}" => {
+    for key, value in local.rules_sgroup_set_new_map_all :
+      "${value.transport}:sg_local(${value.sgroup_from})sg(${value.sgroup_to})${value.traffic}" => {
         
         traffic     = value.traffic
 
-        sg          = value.sg
-        sg_local    = value.sg_local
+        sg          = value.sgroup_to
+        sg_local    = value.sgroup_from
 
         transport   = value.transport
         logs        = value.logs
