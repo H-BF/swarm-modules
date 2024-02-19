@@ -193,7 +193,7 @@ locals {
         for key, value in local.rules_sgroup_set_map_all: [
                 for transport, access in value.access: {
                 "${transport}:${key}": {
-                    transport           = transport
+                    transport       = transport
                     sgroup_from     = value.sgroup_from
                     sgroup_to       = value.sgroup_to
                     access          = value.access[transport]
