@@ -20,46 +20,6 @@ locals {
         ]
     ])
 
-    # rules_map_all_by_traffic = { for item in local.rules_flatten_all :
-    #   keys(item)[0] => values(item)[0]
-    # }
-
-    # {
-    #   + "no-routed:namespace/env/gitlab-runner:s2s"                  = {
-    #       + access      = {
-    #           + udp = [
-    #               + {
-    #                   + description = ""
-    #                   + ports_from  = null
-    #                   + ports_to    = [
-    #                       + 53,
-    #                     ]
-    #                 },
-    #             ]
-    #         }
-    #       + logs        = false
-    #       + sgroup_from = "no-routed"
-    #       + sgroup_to   = "namespace/env/gitlab-runner"
-    #       + trace       = false
-    #       + traffic     = "s2s"
-    #         }
-    #     }
-    # }
-    # ->
-    # CLASSIC SINGLE SGROUP RESOURCE
-    # отключил в пользу унификации через sgroupSet
-    # rules_map_all = { for item in local.rules_flatten_all :
-    #     "${item.sgroup_from}:${item.sgroup_to}:${item.traffic}" => {
-    #         sgroup_from     = item.sgroup_from
-    #         sgroup_to       = item.sgroup_to
-    #         access          = item.access
-    #         logs            = try(item.logs, false)
-    #         trace           = try(item.trace, false)
-    #         traffic         = item.traffic
-    #     }
-    #     # Условие срабатывания если есть блок sgroup_to
-    #     if try(item.sgroup_to, "") != ""
-    # }
 
     # {
     #   + "namespace/env/gitlab-runner:71439deb:s2s" = {
@@ -142,32 +102,6 @@ locals {
     }
 
 
-
-    #  
-    #   + {
-    #     + "no-routed:namespace/env/gitlab-runner:s2s" = {
-    #       + access      = {
-    #           + udp = [
-    #               + {
-    #                   + description = ""
-    #                   + ports_to    = [
-    #                       + 53,
-    #                     ]
-    #                 },
-    #             ]
-    #         }
-    #       + logs        = false
-    #       + sgroup_from = "no-routed"
-    #       + sgroup_to   = "namespace/env/gitlab-runner"
-    #       + trace       = false
-    #       + traffic     = "s2s"
-    #     }
-    #  
-    # ->
-    # отключил в пользу унификации через sgroupSet
-    # rules_sgroup_set_map_all = merge(local.rules_map_all, local.rules_sgoup_to_map_all)
-    rules_sgroup_set_map_all = local.rules_sgoup_to_map_all
-
     #  [
     #   + {
     #       + "udp:no-routed:namespace/env/gitlab-runner:s2s" = {
@@ -190,7 +124,7 @@ locals {
     #  ]
     # ->
     rules_sgroups_by_proto_flatten_all = flatten([
-        for key, value in local.rules_sgroup_set_map_all: [
+        for key, value in local.rules_sgoup_to_map_all: [
                 for transport, access in value.access: {
                 "${transport}:${key}": {
                     transport       = transport
