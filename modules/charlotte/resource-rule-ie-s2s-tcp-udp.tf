@@ -5,7 +5,7 @@ resource "sgroups_ie_rules" "rules" {
   ]
   items = {
     for key, value in local.rules_sgroup_set_new_map_all :
-      "${value.transport}:sg-local(${value.sgroup_from})sg(${value.sgroup_to}):${value.traffic}" => {
+      "${value.transport}:sg-local(${value.sgroup_from})sg(${value.sgroup_to})${value.traffic}" => {
         
         traffic     = value.traffic
 
