@@ -1,5 +1,5 @@
 # Terraform V2
-resource "sgroups_ie_icmp_rules" "rules" {
+resource "sgroups_cidr_icmp_rules" "rules" {
   depends_on = [
     sgroups_groups.groups,
   ]
