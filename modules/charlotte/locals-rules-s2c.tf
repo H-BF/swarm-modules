@@ -17,37 +17,6 @@ locals {
         if contains(["egress","ingress"], "${value.traffic}")
     }
 
-
-    # [
-    #   + {
-    #       + "namespace/env/gitlab-runner:11.0.0.0/8:ingress:f95db275" = {
-    #           + access  = {
-    #               + tcp = [
-    #                   + {
-    #                       + description = ""
-    #                       + ports_to    = [
-    #                           + 123,
-    #                         ]
-    #                     },
-    #                 ]
-    #               + udp = [
-    #                   + {
-    #                       + description = ""
-    #                       + ports_to    = [
-    #                           + 123,
-    #                         ]
-    #                     },
-    #                 ]
-    #             }
-    #           + cidr    = "11.0.0.0/8"
-    #           + logs    = false
-    #           + sg_name = "namespace/env/gitlab-runner"
-    #           + trace   = false
-    #           + traffic = "ingress"
-    #         }
-    #     },
-    # ]
-    # --->
     # Получаем  акутальный список правил с разбивкой по ingress/egress для каждого CIDR
     rules_map_all_ie_s2c_flatten = flatten([
         for key, value in local.rules_map_all_ie_s2c: [
@@ -66,26 +35,6 @@ locals {
       keys(item)[0] => values(item)[0]
     }
 
-    # [   {
-    #       + "udp:namespace/env/gitlab-runner:11.0.0.0/8:ingress:f95db275" = {
-    #           + access  = [
-    #               + {
-    #                   + description = ""
-    #                   + ports_to    = [
-    #                       + 123,
-    #                     ]
-    #                 },
-    #             ]
-    #           + cidr    = "11.0.0.0/8"
-    #           + logs    = false
-    #           + transport   = "udp"
-    #           + sg_name = "namespace/env/gitlab-runner"
-    #           + trace   = false
-    #           + traffic = "ingress"
-    #         }
-    #     },
-    # ]
-    #---->
     # Получаем  акутальный список правил с разбивкой по TRANSPORT для каждого CIDR
     rules_map_all_ie_s2c_by_proto_flatten = flatten([
         for key, value in local.rules_map_all_ie_s2c_map: [
