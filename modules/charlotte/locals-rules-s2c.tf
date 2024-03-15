@@ -6,8 +6,6 @@ locals {
             sgroup_from      = value.sgroup_from
             cidr_set         = value.cidrSet
             access           = value.access
-            # logs             = try(value.logs,  false)
-            # trace            = try(value.trace, false)
             traffic          = value.traffic
         }
         # Условие срабатывания если есть блок cidrSet
@@ -58,8 +56,6 @@ locals {
                     sg_name     = value.sgroup_from
                     cidr        = cidr
                     access      = value.access
-                    # logs        = value.logs
-                    # trace       = value.trace
                     traffic     = value.traffic
                 }
             }

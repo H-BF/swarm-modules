@@ -89,8 +89,6 @@ locals {
                     sgroup_from = value.sgroup_from
                     sgroup_to   = sgroup
                     access      = value.access
-                    # logs        = try(value.logs, false)
-                    # trace       = try(value.logs, false)
                     traffic     = value.traffic
                 }
             }
