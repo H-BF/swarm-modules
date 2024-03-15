@@ -50,8 +50,8 @@ locals {
             sgroup_from      = item.sgroup_from
             sgroup_set       = item.sgroupSet
             access           = item.access
-            logs             = try(item.logs,  false)
-            trace            = try(item.trace, false)
+            # logs             = try(item.logs,  false)
+            # trace            = try(item.trace, false)
             traffic          = item.traffic
         }
         # Условие срабатывания если есть блок sgroupSet
@@ -89,8 +89,8 @@ locals {
                     sgroup_from = value.sgroup_from
                     sgroup_to   = sgroup
                     access      = value.access
-                    logs        = try(value.logs, false)
-                    trace       = try(value.logs, false)
+                    # logs        = try(value.logs, false)
+                    # trace       = try(value.logs, false)
                     traffic     = value.traffic
                 }
             }
@@ -131,8 +131,8 @@ locals {
                     sgroup_from     = value.sgroup_from
                     sgroup_to       = value.sgroup_to
                     access          = value.access[transport]
-                    logs            = try(value.logs,  false)
-                    trace           = try(value.trace, false)
+                    logs            = try(value.access[transport].logs,  false)
+                    trace           = try(value.access[transport].trace, false)
                     traffic         = value.traffic
                 }
             }

@@ -17,7 +17,7 @@ resource "sgroups_cidr_rules" "rules" {
         trace       = value.trace
 
         ports = flatten([
-          for port in value.access: {
+          for port in value.access.ports: {
             s = try(join(",", port.ports_from), null)
             d = try(join(",", port.ports_to),   null)
           }

@@ -17,7 +17,7 @@ resource "sgroups_cidr_icmp_rules" "rules" {
         trace   = value.trace
 
         type = flatten([
-          for item in value.access: [item.type]
+          for item in value.access.types: [item.type]
         ])
       }
 

@@ -11,9 +11,9 @@ resource "sgroups_fqdn_rules" "rules" {
         trace     = value.trace
         sg_from   = value.sgroup_from
         fqdn      = value.fqdn_to
-        protocols = value.protocols
+        # protocols = value.protocols
         ports = flatten([
-          for port in value.access: {
+          for port in value.access.ports: {
             s = try(join(",", port.ports_from), null)
             d = try(join(",", port.ports_to),   null)
           }
