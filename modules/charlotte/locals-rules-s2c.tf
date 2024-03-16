@@ -43,9 +43,9 @@ locals {
                     transport       = transport
                     sg_name         = value.sg_name
                     cidr            = value.cidr
-                    access          = value.access[transport]
-                    logs            = try(value.access[transport].logs, false)
-                    trace           = try(value.access[transport].trace, false)
+                    access          = access
+                    logs            = try(access.logs, false)
+                    trace           = try(access.trace, false)
                     traffic         = value.traffic
                 }
             }

@@ -58,9 +58,9 @@ locals {
                     transport       = transport
                     sgroup_from     = value.sgroup_from
                     sgroup_to       = value.sgroup_to
-                    access          = value.access[transport]
-                    logs            = try(value.access[transport].logs,  false)
-                    trace           = try(value.access[transport].trace, false)
+                    access          = access
+                    logs            = try(access.logs,  false)
+                    trace           = try(access.trace, false)
                     traffic         = value.traffic
                 }
             }
