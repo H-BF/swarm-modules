@@ -1,5 +1,6 @@
 locals {
-    default_action_global = "ACCEPT"
+    default_action_global       = "ACCEPT"
+    default_action_global_icmp  = "ACCEPT"
     security_groups = flatten([
         for sg, value in var.sgroups_var : [
             value
@@ -20,17 +21,20 @@ locals {
                 trace           = try(security_group.default_rules.access.default.trace,  false)
 
                 icmp = try(security_group.default_rules.access.icmp.type, null) == null ? null : {
-                    logs  = try(security_group.default_rules.access.icmp.logs,   false)
-                    trace = try(security_group.default_rules.access.icmp.trace,  false)
-                    type  = try(security_group.default_rules.access.icmp.type,   [])
+                    logs        = try(security_group.default_rules.access.icmp.logs,   false)
+                    trace       = try(security_group.default_rules.access.icmp.trace,  false)
+                    type        = try(security_group.default_rules.access.icmp.type,   [])
+                    action      = try(security_group.default_rules.access.icmp.action, local.default_action_global_icmp)
+                    priority    = try(security_group.default_rules.access.icmp.trace, null)
                 }
+
                 icmp6 = try(security_group.default_rules.access.icmp6.type, null) == null ? null : {
-                    logs  = try(security_group.default_rules.access.icmp6.logs,   false)
-                    trace = try(security_group.default_rules.access.icmp6.trace,  false)
-                    type  = try(security_group.default_rules.access.icmp6.type,   [])
+                    logs        = try(security_group.default_rules.access.icmp6.logs,   false)
+                    trace       = try(security_group.default_rules.access.icmp6.trace,  false)
+                    type        = try(security_group.default_rules.access.icmp6.type,   [])
+                    action      = try(security_group.default_rules.access.icmp6.action, local.default_action_global_icmp)
+                    priority    = try(security_group.default_rules.access.icmp6.trace, null)
                 }
-
-
             }
         }
     ])
@@ -42,5 +46,4 @@ locals {
         # Нужна, что бы можно было сначала создать SG и Networks потом добавить правила иначе будет перезапись в 0 
         if values(item)[0] != ""
     }
-
 }
