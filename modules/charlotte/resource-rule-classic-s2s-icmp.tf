@@ -19,6 +19,7 @@ resource "sgroups_icmp_rules" "rules" {
         ])
 
         action      = value.action
+        priority    = value.priority
       }
     if contains(["icmpIPv6:s2s", "icmpIPv4:s2s"], "${value.transport}:${value.traffic}")
   }

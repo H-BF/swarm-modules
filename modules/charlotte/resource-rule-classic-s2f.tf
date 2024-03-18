@@ -23,6 +23,7 @@ resource "sgroups_fqdn_rules" "rules" {
         ])
 
         action      = value.action
+        priority    = value.priority
       }
   }
 }

@@ -53,6 +53,7 @@ locals {
             logs             = try(item.logs,  false)
             trace            = try(item.trace, false)
             action           = try(item.action, "ACCEPT")
+            priority         = try(item.priority, null)
             traffic          = item.traffic
         }
         # Условие срабатывания если есть блок sgroupSet
@@ -93,6 +94,7 @@ locals {
                     logs        = value.logs
                     trace       = value.trace
                     action      = value.action
+                    priority    = value.priority
                     traffic     = value.traffic
                 }
             }
@@ -136,6 +138,7 @@ locals {
                     logs            = value.logs
                     trace           = value.trace
                     action          = value.action
+                    priority        = value.priority
                     traffic         = value.traffic
                 }
             }

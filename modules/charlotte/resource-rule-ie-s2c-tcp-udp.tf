@@ -24,6 +24,7 @@ resource "sgroups_cidr_rules" "rules" {
         ])
 
         action      = value.action
+        priority    = value.priority
       }
 
       if contains(["tcp:ingress",
