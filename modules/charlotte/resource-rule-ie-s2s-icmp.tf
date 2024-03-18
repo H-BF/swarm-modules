@@ -19,6 +19,9 @@ resource "sgroups_ie_icmp_rules" "rules" {
         type = flatten([
           for item in value.access: [item.type]
         ])
+
+        action      = value.action
+        priority    = value.priority
       }
 
     if contains(["icmpIPv6:ingress",
