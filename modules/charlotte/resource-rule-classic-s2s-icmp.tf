@@ -9,13 +9,16 @@ resource "sgroups_icmp_rules" "rules" {
         
         logs    = value.logs
         trace   = value.trace
+
         sg_from = value.sgroup_from
         sg_to   = value.sgroup_to
-        ip_v    = split("icmp", value.transport).1
 
+        ip_v    = split("icmp", value.transport).1
         type = flatten([
           for item in value.access: [item.type]
         ])
+
+        action      = value.action
       }
     if contains(["icmpIPv6:s2s", "icmpIPv4:s2s"], "${value.transport}:${value.traffic}")
   }

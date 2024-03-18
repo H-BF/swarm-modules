@@ -22,6 +22,8 @@ resource "sgroups_cidr_rules" "rules" {
             d = try(join(",", port.ports_to),   null)
           }
         ])
+
+        action      = value.action
       }
 
       if contains(["tcp:ingress",
