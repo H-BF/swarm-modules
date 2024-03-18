@@ -52,6 +52,7 @@ locals {
             access           = item.access
             logs             = try(item.logs,  false)
             trace            = try(item.trace, false)
+            action           = try(item.action, "ACCEPT")
             traffic          = item.traffic
         }
         # Условие срабатывания если есть блок sgroupSet
@@ -89,8 +90,9 @@ locals {
                     sgroup_from = value.sgroup_from
                     sgroup_to   = sgroup
                     access      = value.access
-                    logs        = try(value.logs, false)
-                    trace       = try(value.logs, false)
+                    logs        = value.logs
+                    trace       = value.trace
+                    action      = value.action
                     traffic     = value.traffic
                 }
             }
@@ -131,8 +133,9 @@ locals {
                     sgroup_from     = value.sgroup_from
                     sgroup_to       = value.sgroup_to
                     access          = value.access[transport]
-                    logs            = try(value.logs,  false)
-                    trace           = try(value.trace, false)
+                    logs            = value.logs
+                    trace           = value.trace
+                    action          = value.action
                     traffic         = value.traffic
                 }
             }

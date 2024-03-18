@@ -8,6 +8,7 @@ locals {
             access           = value.access
             logs             = try(value.logs,  false)
             trace            = try(value.trace, false)
+            action           = try(value.action, "ACCEPT")
             traffic          = value.traffic
         }
         # Условие срабатывания если есть блок cidrSet
@@ -60,6 +61,7 @@ locals {
                     access      = value.access
                     logs        = value.logs
                     trace       = value.trace
+                    action      = value.action
                     traffic     = value.traffic
                 }
             }
@@ -101,6 +103,7 @@ locals {
                     access          = value.access[transport]
                     logs            = value.logs
                     trace           = value.trace
+                    action          = value.action
                     traffic         = value.traffic
                 }
             }
