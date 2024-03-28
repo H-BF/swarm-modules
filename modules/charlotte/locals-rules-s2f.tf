@@ -27,6 +27,7 @@ locals {
                     protocols       = value.protocols
                     sgroup_from     = value.sgroup_from
                     access          = value.access[transport]
+                    traffic         = value.traffic
                 }
             }
             ]
