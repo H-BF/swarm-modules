@@ -24,7 +24,7 @@ resource "sgroups_ie_rules" "rules" {
         ])
 
         action      = value.access.action
-        priority    = try(0, value.access.priority)
+        priority    = try(value.access.priority, 0)
       }
 
       if contains(["tcp:ingress",
