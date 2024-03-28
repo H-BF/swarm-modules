@@ -26,10 +26,6 @@ locals {
             sgroup_from      = item.sgroup_from
             sgroup_set       = item.sgroupSet
             access           = item.access
-            logs             = try(item.logs,  false)
-            trace            = try(item.trace, false)
-            action           = try(item.action, "ACCEPT")
-            priority         = try(item.priority, null)
             traffic          = item.traffic
         }
         # Условие срабатывания если есть блок sgroupSet
@@ -44,10 +40,6 @@ locals {
                     sgroup_from = value.sgroup_from
                     sgroup_to   = sgroup
                     access      = value.access
-                    logs        = value.logs
-                    trace       = value.trace
-                    action      = value.action
-                    priority    = value.priority
                     traffic     = value.traffic
                 }
             }
@@ -67,10 +59,6 @@ locals {
                     sgroup_from     = value.sgroup_from
                     sgroup_to       = value.sgroup_to
                     access          = value.access[transport]
-                    logs            = value.logs
-                    trace           = value.trace
-                    action          = value.action
-                    priority        = value.priority
                     traffic         = value.traffic
                 }
             }

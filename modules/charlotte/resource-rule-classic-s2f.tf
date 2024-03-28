@@ -6,15 +6,15 @@ resource "sgroups_fqdn_rules" "rules" {
   items = {
     for key, value in local.rules_fqdn_to_map :
       "${value.transport}:sg(${value.sgroup_from})fqdn(${value.fqdn_to})" => {
-        transport = value.transport
 
-        logs      = value.logs
-        trace     = value.trace
+        logs      = value.access.logs
+        trace     = value.access.trace
 
         sg_from   = value.sgroup_from
         fqdn      = value.fqdn_to
         
         protocols = value.protocols
+        transport = value.transport
         ports = flatten([
           for port in value.access.ports: {
             s = try(join(",", port.ports_from), null)
@@ -22,8 +22,8 @@ resource "sgroups_fqdn_rules" "rules" {
           }
         ])
 
-        action      = value.action
-        priority    = value.priority
+        action      = value.access.action
+        priority    = value.access.priority
       }
   }
 }

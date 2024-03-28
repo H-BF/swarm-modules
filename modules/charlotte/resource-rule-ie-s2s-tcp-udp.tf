@@ -6,16 +6,16 @@ resource "sgroups_ie_rules" "rules" {
   items = {
     for key, value in local.rules_sgroup_set_new_map_all :
       "${value.transport}:sg-local(${value.sgroup_from})sg(${value.sgroup_to})${value.traffic}" => {
-        
+
+        logs        = value.access.logs
+        trace       = value.access.trace
+
         traffic     = value.traffic
 
         sg          = value.sgroup_to
         sg_local    = value.sgroup_from
 
         transport   = value.transport
-        logs        = value.logs
-        trace       = value.trace
-
         ports = flatten([
           for port in value.access.ports: {
             s = try(join(",", port.ports_from), null)
@@ -23,8 +23,8 @@ resource "sgroups_ie_rules" "rules" {
           }
         ])
 
-        action      = value.action
-        priority    = value.priority
+        action      = value.access.action
+        priority    = value.access.priority
       }
 
       if contains(["tcp:ingress",

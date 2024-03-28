@@ -6,10 +6,6 @@ locals {
             sgroup_from      = value.sgroup_from
             cidr_set         = value.cidrSet
             access           = value.access
-            logs             = try(value.logs,  false)
-            trace            = try(value.trace, false)
-            action           = try(value.action, "ACCEPT")
-            priority         = try(value.priority, null)
             traffic          = value.traffic
         }
         # Условие срабатывания если есть блок cidrSet
@@ -29,10 +25,6 @@ locals {
                     sg_name     = value.sgroup_from
                     cidr        = cidr
                     access      = value.access
-                    logs        = value.logs
-                    trace       = value.trace
-                    action      = value.action
-                    priority    = value.priority
                     traffic     = value.traffic
                 }
             }
@@ -52,10 +44,6 @@ locals {
                     sg_name         = value.sg_name
                     cidr            = value.cidr
                     access          = value.access[transport]
-                    logs            = value.logs
-                    trace           = value.trace
-                    action          = value.action
-                    priority        = value.priority
                     traffic         = value.traffic
                 }
             }

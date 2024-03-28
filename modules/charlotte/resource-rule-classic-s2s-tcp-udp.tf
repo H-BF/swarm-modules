@@ -7,8 +7,8 @@ resource "sgroups_rules" "rules" {
     for key, value in local.rules_sgroup_set_new_map_all :
       "${value.transport}:sg(${value.sgroup_from})sg(${value.sgroup_to})" => {
 
-        logs        = value.logs
-        # trace   = value.trace #TODO
+        logs        = value.access.logs
+        trace       = value.access.trace
 
         sg_from     = value.sgroup_from
         sg_to       = value.sgroup_to
@@ -21,9 +21,10 @@ resource "sgroups_rules" "rules" {
           }
         ])
 
-        action      = value.action
-        priority    = value.priority
+        action      = value.access.action
+        priority    = value.access.priority
       }
-      if contains(["tcp:s2s", "udp:s2s"], "${value.transport}:${value.traffic}")
+      if contains(["tcp:s2s",
+                   "udp:s2s"], "${value.transport}:${value.traffic}")
   }
 }
