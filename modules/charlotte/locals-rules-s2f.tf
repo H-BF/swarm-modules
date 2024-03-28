@@ -6,6 +6,10 @@ locals {
             sgroup_from = item.sgroup_from
             protocols   = try(item.protocols, null)
             fqdnSet     = try(item.fqdnSet, [])
+            logs        = try(item.logs,  false)
+            trace       = try(item.trace, false)
+            action      = try(item.action, "ACCEPT")
+            priority    = try(item.priority, null)
             traffic     = item.traffic
         }
         # Условие срабатывания если есть блок fqdns
@@ -26,9 +30,11 @@ locals {
                     transport       = transport
                     protocols       = value.protocols
                     sgroup_from     = value.sgroup_from
-                    access          = access
-                    logs            = try(access.logs,  false)
-                    trace           = try(access.trace, false)
+                    access          = value.access[transport]
+                    logs            = value.logs
+                    trace           = value.trace
+                    action          = value.action
+                    priority        = value.priority
                 }
             }
             ]
