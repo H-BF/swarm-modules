@@ -23,7 +23,7 @@ resource "sgroups_fqdn_rules" "rules" {
         ])
 
         action      = value.access.action
-        priority    = value.access.priority
+        priority    = try(100, value.access.priority)
       }
   }
 }
