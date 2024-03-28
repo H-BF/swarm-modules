@@ -22,7 +22,7 @@ resource "sgroups_rules" "rules" {
         ])
 
         action      = value.access.action
-        priority    = try(value.access.priority, -200)
+        priority    = try(value.access.priority, null)
       }
       if contains(["tcp:s2s",
                    "udp:s2s"], "${value.transport}:${value.traffic}")

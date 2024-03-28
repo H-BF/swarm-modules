@@ -21,7 +21,7 @@ resource "sgroups_ie_icmp_rules" "rules" {
         ])
 
         action      = value.access.action
-        priority    = try(value.access.priority, -100)
+        priority    = try(value.access.priority, null)
       }
 
     if contains(["icmpIPv6:ingress",
